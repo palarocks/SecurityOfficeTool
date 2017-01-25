@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block content %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">SPAM check: <b>{{ target }} </b> </h1>
+                    </div>
+                    <!-- NSLOOKUP -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Nslookup</h3>
+                             </div>
+                            <div class="panel-body">
+                               {% if nslookup %}
+                                   Hostname: <b>{{ hostname }}</b><br><br>
+                                   Alias list: <b>{{ aliaslist }}</b><br><br>
+                                   IP address list: <b>{{ ipaddrlist }}</b>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- SPF RECORD -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                               <h3 class="panel-title">SPF Record</h3>
+                            </div>
+                            <div class="panel-body">
+                                 {% if no_spf %}
+                                    <span class="label label-danger">NO SPF CONFIGURED</span>
+                                {% elif poor_confiuration %}
+                                    <span class="label label-warning">WEAK CONFIGURATION</span>
+                                {% elif spf_all %}
+                                    <span class="label label-success">GOOD CONFIGURATION</span>
+                                     <br><br>Configuration of SPF record contains All item: <b> {{ spf_all_valor }}</b>
+                                {% endif %} <br><br>
+                                SPF configuration:<br>
+                                <b> {{ spf_configuration }} </b>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DMARC RECORD -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">DMARC Record</h3>
+                             </div>
+                            <div class="panel-body">
+                              No info available
+                            </div>
+                        </div>
+                    </div>
+                    <!-- WHOIS INFO -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">WHOIS Info</h3>
+                             </div>
+                            <div class="panel-body">
+                                Organization: <a target="_blank" href="http://www.google.com/search?q={{ org }}"><b>{{ org }}</b></a><br><br>
+                                Country: <b>{{ country }}</b><br><br>
+                                Date creation: <b>{{ date }}</b>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- BLACKLIST -->
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">
+                                 <h3 class="panel-title">Blacklist</h3>
+                            </div>
+                            <div class="panel-body">
+                             <!--    <p><b>The result of the blacklist checks is: </b><span class="label label-success">SUCCESS</span></p> -->
+                               {% if total == 0 %}
+                                   <p><b>The result of the blacklist checks is: </b><span class="label label-success">{{ total }} / 15</span></p>
+                               {% else %}
+                                   <p><b>The result of the blacklist checks is: </b><span class="label label-danger">{{ total }} / 15</span></p>
+                               {% endif %}
+                            </div>
+
+                            <!-- Table -->
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>List</th>
+                                        <th>Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tor node</td>
+                                        {%  if tor %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>General Blacklist 10days    </td>
+                                        {%  if blacklist %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>Emerging Threats    </td>
+                                        {%  if  EmergingThreats%}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>AlienVault   </td>
+                                        {%  if AlienVault %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}
+                                    </tr>
+                                    <tr>
+                                        <td>BlocklistDE</td>
+                                        {%  if BlocklistDE %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>Dragon Research Group - SSH</td>
+                                        {%  if DragonSSH %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>Dragon Research Group - VNC</td>
+                                        {%  if DragonVNC %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>OpenBLock</td>
+                                        {%  if OpenBLock %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>NoThinkMalware</td>
+                                        {%  if NoThinkMalware %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>NoThinkSSH</td>
+                                        {%  if NoThinkSSH %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>Feodo</td>
+                                        {%  if Feodo %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>antispam.imp.ch</td>
+                                        {%  if antispam %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>dshield</td>
+                                        {%  if dshield %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>malc0de</td>
+                                        {%  if malc0de %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                    <tr>
+                                        <td>MalWareBytes</td>
+                                        {%  if MalWareBytes %}
+                                            <td><span class="glyphicon glyphicon-remove-sign text-danger" aria-hidden="true"></span></td>
+                                        {%  else %}
+                                            <td><span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span></td>
+                                        {%  endif %}                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+{% endblock content %}

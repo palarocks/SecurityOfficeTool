@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+               <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">SPAM check</h1>
+                        <div align="center"  id="content">
+                        <ul id="action-options" class="tabs nav nav-tabs margin-top-2 center">
+                            <li class="">
+                              <a href="#file" data-toggle="tab"><i class="icon-file"></i> Mail</a>
+                            </li>
+                            <li class="">
+                              <a href="#file" data-toggle="tab"><i class="icon-file"></i> Archivo</a>
+                            </li>
+                            <li class="">
+                              <a id="url-tab-chooser" href="#url" data-toggle="tab"><i class="icon-globe"></i> URL</a>
+                            </li>
+                            <li class="active">
+                              <a id="search-tab-chooser" href="#search" data-toggle="tab"><i class="icon-search"></i> Buscar</a>
+                            </li>
+                        </ul>
+                        <br><br>
+                        <div class="col-lg-6">
+                            <form action="/resultados_spam/" method="POST">
+                            {% csrf_token %}
+                                <div class="input-group">
+                                      <input type="text" name="ip" class="form-control" placeholder="Search for...">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-default" id="buscar" type="submit">Search</button>
+                                      </span>
+                                </div>
+                            </form>
+                            {% load staticfiles %}
+                            <script>
+                                document.getElementById("buscar").onclick = function() {myFunction()};
+
+                                function myFunction() {
+                                    document.getElementById("content").innerHTML = '<img src="{% static "loading.gif" %}"/>';
+                                }
+                            </script>
+                        </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+               </div><!-- /.row -->
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+{% endblock content %}
